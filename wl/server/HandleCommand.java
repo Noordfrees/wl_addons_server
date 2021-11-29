@@ -798,7 +798,8 @@ public class HandleCommand {
 		// Args: name filesize checksum whitespaces description
 		checkCommandVersion(1);
 		if (cmd.length < 5)
-			throw new ServerUtils.WLProtocolException("Expected at least 5 argument(s), found " + (cmd.length - 1));
+			throw new ServerUtils.WLProtocolException("Expected at least 5 argument(s), found " +
+			                                          (cmd.length - 1));
 		cmd[1] = ServerUtils.sanitizeName(cmd[1], false);
 		ServerUtils.checkAddOnExists(cmd[1]);
 		if (username.isEmpty())
@@ -809,8 +810,8 @@ public class HandleCommand {
 
 		int whitespaces = Integer.valueOf(cmd[4]);
 		if (whitespaces < 0 || whitespaces > 1000)
-			throw new ServerUtils.WLProtocolException("Description too long (" +
-			                                          whitespaces + " words)");
+			throw new ServerUtils.WLProtocolException("Description too long (" + whitespaces +
+			                                          " words)");
 		ServerUtils.checkNrArgs(cmd, 5 + whitespaces);
 		long size = Long.valueOf(cmd[2]);
 		if (size > 4 * 1000 * 1000)
@@ -860,9 +861,9 @@ public class HandleCommand {
 				Utils.editProfile(descriptionsFile, profile);
 
 				Utils.sendEMailToSubscribedAdmins(
-					Utils.kEMailVerbosityFYI, "Add-On Screenshot Uploaded",
-					"A new screenshot has been uploaded for the add-on " + cmd[1] + " by " +
-					username + ".\n\nDescription: " + msg);
+				    Utils.kEMailVerbosityFYI, "Add-On Screenshot Uploaded",
+				    "A new screenshot has been uploaded for the add-on " + cmd[1] + " by " +
+				        username + ".\n\nDescription: " + msg);
 
 				out.println("ENDOFSTREAM");
 			} catch (Exception e) {
@@ -880,7 +881,8 @@ public class HandleCommand {
 		// Args: name screenshot whitespaces description
 		checkCommandVersion(1);
 		if (cmd.length < 4)
-			throw new ServerUtils.WLProtocolException("Expected at least 4 argument(s), found " + (cmd.length - 1));
+			throw new ServerUtils.WLProtocolException("Expected at least 4 argument(s), found " +
+			                                          (cmd.length - 1));
 		cmd[1] = ServerUtils.sanitizeName(cmd[1], false);
 		cmd[2] = ServerUtils.sanitizeName(cmd[2], false);
 		ServerUtils.checkAddOnExists(cmd[1]);
@@ -891,8 +893,8 @@ public class HandleCommand {
 			    "You can not submit screenshots for another person's add-on");
 		int whitespaces = Integer.valueOf(cmd[3]);
 		if (whitespaces < 0 || whitespaces > 1000)
-			throw new ServerUtils.WLProtocolException("Description too long (" +
-			                                          whitespaces + " words)");
+			throw new ServerUtils.WLProtocolException("Description too long (" + whitespaces +
+			                                          " words)");
 		ServerUtils.checkNrArgs(cmd, 4 + whitespaces);
 
 		ServerUtils.semaphoreRW(cmd[1], () -> {
@@ -909,18 +911,17 @@ public class HandleCommand {
 				String msg = cmd[4];
 				for (int w = 0; w < whitespaces; ++w) msg += " " + cmd[5 + w];
 				Utils.sendEMailToSubscribedAdmins(
-					Utils.kEMailVerbosityFYI, "Add-On Screenshot Updated",
-					"A screenshot has been updated for the add-on " + cmd[1] + " by " +
-					username + ".\n\nFile: " + cmd[2] + "\nOld description: " + profile.get(cmd[2]).value +
-					"\nNew description: " + msg);
-				profile.getSection("").contents.put(
-				    cmd[2], new Utils.Value(cmd[2], msg, cmd[1]));
+				    Utils.kEMailVerbosityFYI, "Add-On Screenshot Updated",
+				    "A screenshot has been updated for the add-on " + cmd[1] + " by " + username +
+				        ".\n\nFile: " + cmd[2] + "\nOld description: " + profile.get(cmd[2]).value +
+				        "\nNew description: " + msg);
+				profile.getSection("").contents.put(cmd[2], new Utils.Value(cmd[2], msg, cmd[1]));
 			} else {
 				Utils.sendEMailToSubscribedAdmins(
-					Utils.kEMailVerbosityFYI, "Add-On Screenshot Deleted",
-					"A screenshot has been deleted for the add-on " + cmd[1] + " by " +
-					username + ".\n\nFile: " + cmd[2] + "\nFormer description: " +
-					profile.get(cmd[2]).value);
+				    Utils.kEMailVerbosityFYI, "Add-On Screenshot Deleted",
+				    "A screenshot has been deleted for the add-on " + cmd[1] + " by " + username +
+				        ".\n\nFile: " + cmd[2] +
+				        "\nFormer description: " + profile.get(cmd[2]).value);
 				profile.getSection("").contents.remove(cmd[2]);
 				image.delete();
 			}

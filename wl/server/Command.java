@@ -68,7 +68,7 @@ package wl.server;
  * <li> munin: <br>
  *   The "munin" protocol is used to print statistics about the server.
  *   In the initial contact, language and username are skipped; instead the munin protocol
- *   version is printed (only currently supported version is 2).
+ *   version is printed (only currently supported version is 3).
  *   The password authentication is then performed like for registered users.
  *   If the password is correct, the server replies not <code>ADMIN</code>/<code>SUCCESS</code> but instead
  *   prints out server statistics in the following format:
@@ -97,6 +97,7 @@ package wl.server;
  *   <li> Counter of <code>CMD_EDIT_COMMENT      </code> requests, <code>\n</code>
  *   <li> Counter of <code>CMD_SUBMIT            </code> requests, <code>\n</code>
  *   <li> Counter of <code>CMD_SUBMIT_SCREENSHOT </code> requests, <code>\n</code>
+ *   <li> PV 3+: Counter of <code>CMD_EDIT_SCREENSHOT </code> requests, <code>\n</code>
  *   <li> Counter of <code>CMD_CONTACT           </code> requests, <code>\n</code>
  *   <li> Counter of <code>CMD_SETUP_TX          </code> requests, <code>\n</code>
  *   <li> PV 2+: Counter of <code>CMD_ADMIN_DELETE    </code> requests, <code>\n</code>
@@ -433,6 +434,29 @@ public enum Command {
 	 * Returns: <code>ENDOFSTREAM\n</code> or an error message followed by <code>\n</code>
 	 */
 	CMD_SUBMIT_SCREENSHOT,
+
+	/**
+	 * <code>CMD_EDIT_SCREENSHOT addon screenshot whitespaces description</code>
+	 *
+	 * <p>
+	 * Supported command versions: 1
+	 *
+	 * <p>
+	 * Edit a screenshot's description or delete the screenshot.
+	 *
+	 * <p> Parameters:
+	 * <ol>
+	 * <li> Add-on name
+	 * <li> Screenshot filename
+	 * <li> Number of whitespaces in the new description
+	 * <li> New screenshot description
+	 * </ol>
+	 * An empty description deletes the screenshot.
+	 *
+	 * <p>
+	 * Returns: <code>ENDOFSTREAM\n</code> or an error message followed by <code>\n</code>
+	 */
+	CMD_EDIT_SCREENSHOT,
 
 	/**
 	 * <code>CMD_CONTACT lines</code>
